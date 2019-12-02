@@ -1,8 +1,6 @@
 package ru.skillbranch.gameofthrones
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import okhttp3.internal.notify
-import okhttp3.internal.wait
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -157,14 +155,14 @@ class ExampleInstrumentedTest {
     @Test
     fun insert_house_and_drop_db() {
         //Запись в базу
-        val lock0 = Any()
+        val lock0 = Object()
         RootRepository.insertHouses(listOf(stubHouseStark)) {
             synchronized(lock0) { lock0.notify() }
         }
         synchronized(lock0) { lock0.wait() }
 
         //Обновление не нужно
-        val lock1 = Any()
+        val lock1 = Object()
         var needResult: Boolean? = null
         RootRepository.isNeedUpdate {
             needResult = it
@@ -174,14 +172,14 @@ class ExampleInstrumentedTest {
         assertEquals(false, needResult)
 
         //Дроп базы
-        val lock = Any()
+        val lock = Object()
         RootRepository.dropDb {
             synchronized(lock) { lock.notify() }
         }
         synchronized(lock) { lock.wait() }
 
         //Обновление нужно
-        val lock3 = Any()
+        val lock3 = Object()
         var needResult2: Boolean? = null
         RootRepository.isNeedUpdate {
             needResult2 = it
@@ -192,36 +190,36 @@ class ExampleInstrumentedTest {
     }
 
     @Test
-    fun insert_charters_and_find() {
+    fun insert_characters_and_find() {
         ///Дроп базы
-        val lock = Any()
+        val lock = Object()
         RootRepository.dropDb {
             synchronized(lock) { lock.notify() }
         }
         synchronized(lock) { lock.wait() }
 
         //Запись домов
-        val lock0 = Any()
+        val lock0 = Object()
         RootRepository.insertHouses(listOf(stubHouseStark, stubHouseTargaryen)) {
             synchronized(lock0) { lock0.notify() }
         }
         synchronized(lock0) { lock0.wait() }
 
         //Запись персонажей
-        val lock1 = Any()
+        val lock1 = Object()
         val characters = listOf(
             stubCharacterJonSnow.apply { houseId = "Stark" },
             stubCharacterLyanna.apply { houseId = "Stark" },
             stubCharacterRhaegar.apply { houseId = "Targaryen" }
         )
-        RootRepository.insertCharters(characters) {
+        RootRepository.insertCharacters(characters) {
             synchronized(lock1) { lock1.notify() }
         }
         synchronized(lock1) { lock1.wait() }
 
-        val lock2 = Any()
+        val lock2 = Object()
         var actualCharacters: List<CharacterItem>? = null
-        RootRepository.findChartersByHouseName("Stark") {
+        RootRepository.findCharactersByHouseName("Stark") {
             actualCharacters = it
             synchronized(lock2) { lock2.notify() }
         }
@@ -235,36 +233,36 @@ class ExampleInstrumentedTest {
     }
 
     @Test
-    fun insert_charters_and_full() {
+    fun insert_characters_and_full() {
         ///Дроп базы
-        val lock = Any()
+        val lock = Object()
         RootRepository.dropDb {
             synchronized(lock) { lock.notify() }
         }
         synchronized(lock) { lock.wait() }
 
         //Запись домов
-        val lock0 = Any()
+        val lock0 = Object()
         RootRepository.insertHouses(listOf(stubHouseStark, stubHouseTargaryen)) {
             synchronized(lock0) { lock0.notify() }
         }
         synchronized(lock0) { lock0.wait() }
 
         //Запись персонажей
-        val lock1 = Any()
+        val lock1 = Object()
         val characters = listOf(
             stubCharacterJonSnow.apply { houseId = "Stark" },
             stubCharacterLyanna.apply { houseId = "Stark" },
             stubCharacterRhaegar.apply { houseId = "Targaryen" }
         )
-        RootRepository.insertCharters(characters) {
+        RootRepository.insertCharacters(characters) {
             synchronized(lock1) { lock1.notify() }
         }
         synchronized(lock1) { lock1.wait() }
 
-        val lock2 = Any()
+        val lock2 = Object()
         var actualCharacter: CharacterFull? = null
-        RootRepository.findCharterFullById("583") {
+        RootRepository.findCharacterFullById("583") {
             actualCharacter = it
             synchronized(lock2) { lock2.notify() }
         }
@@ -283,7 +281,7 @@ class ExampleInstrumentedTest {
     @Test
     fun get_all_houses() {
         //Запись персонажей
-        val lock1 = Any()
+        val lock1 = Object()
         var actualHouses: List<HouseRes>? = null
         RootRepository.getAllHouses {
             actualHouses = it
@@ -301,7 +299,7 @@ class ExampleInstrumentedTest {
     @Test
     fun get_need_houses() {
         //Запись персонажей
-        val lock1 = Any()
+        val lock1 = Object()
         var actualHouses: List<HouseRes>? = null
         RootRepository.getNeedHouses(
             "House Greyjoy of Pyke",
@@ -321,9 +319,9 @@ class ExampleInstrumentedTest {
 
     @Test
     fun get_need_houses_with_characters() {
-        val lock1 = Any()
+        val lock1 = Object()
         var actualHouses: List<Pair<HouseRes, List<CharacterRes>>>? = null
-        RootRepository.getNeedHouseWithCharters(
+        RootRepository.getNeedHouseWithCharacters(
             "House Greyjoy of Pyke"
         ) {
             actualHouses = it
