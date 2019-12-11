@@ -1,7 +1,6 @@
 package ru.skillbranch.kotlinexample
 
 import androidx.annotation.VisibleForTesting
-import java.lang.IllegalArgumentException
 import java.lang.StringBuilder
 import java.math.BigInteger
 import java.security.MessageDigest
@@ -33,7 +32,7 @@ class User private constructor(
 
     private var _login: String? = null
 
-    private var login: String
+    internal var login: String
         set(value) {
             _login = value?.toLowerCase()
         }
