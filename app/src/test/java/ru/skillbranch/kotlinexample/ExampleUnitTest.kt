@@ -93,66 +93,66 @@ class ExampleUnitTest {
         holder.registerUserByPhone("John Doe", "+7 (917) 971-11-11")
     }
 
-//    @Test
-//    fun login_user_success() {
-//        val holder = UserHolder
-//        holder.registerUser("John Doe", "John_Doe@unknown.com","testPass")
-//        val expectedInfo = """
-//            firstName: John
-//            lastName: Doe
-//            login: john_doe@unknown.com
-//            fullName: John Doe
-//            initials: J D
-//            email: John_Doe@unknown.com
-//            phone: null
-//            meta: {auth=password}
-//        """.trimIndent()
-//
-//        val successResult =  holder.loginUser("john_doe@unknown.com", "testPass")
-//
-//        Assert.assertEquals(expectedInfo, successResult)
-//    }
-//
-//    @Test
-//    fun login_user_by_phone_success() {
-//        val holder = UserHolder
-//        val user = holder.registerUserByPhone("John Doe", "+7 (917) 971-11-11")
-//        val expectedInfo = """
-//            firstName: John
-//            lastName: Doe
-//            login: +79179711111
-//            fullName: John Doe
-//            initials: J D
-//            email: null
-//            phone: +79179711111
-//            meta: {auth=sms}
-//        """.trimIndent()
-//
-//        val successResult =  holder.loginUser("+7 (917) 971-11-11", user.accessCode!!)
-//
-//        Assert.assertEquals(expectedInfo, successResult)
-//    }
-//
-//    @Test
-//    fun login_user_fail() {
-//        val holder = UserHolder
-//        holder.registerUser("John Doe", "John_Doe@unknown.com","testPass")
-//
-//        val failResult =  holder.loginUser("john_doe@unknown.com", "test")
-//
-//        Assert.assertNull(failResult)
-//    }
-//
-//    @Test
-//    fun login_user_not_found() {
-//        val holder = UserHolder
-//        holder.registerUser("John Doe", "John_Doe@unknown.com","testPass")
-//
-//        val failResult =  holder.loginUser("john_cena@unknown.com", "test")
-//
-//        Assert.assertNull(failResult)
-//    }
-//
+    @Test
+    fun login_user_success() {
+        val holder = UserHolder
+        holder.registerUser("John Doe", "John_Doe@unknown.com","testPass")
+        val expectedInfo = """
+            firstName: John
+            lastName: Doe
+            login: john_doe@unknown.com
+            fullName: John Doe
+            initials: J D
+            email: John_Doe@unknown.com
+            phone: null
+            meta: {auth=password}
+        """.trimIndent()
+
+        val successResult =  holder.loginUser("john_doe@unknown.com", "testPass")
+
+        Assert.assertEquals(expectedInfo, successResult)
+    }
+
+    @Test
+    fun login_user_by_phone_success() {
+        val holder = UserHolder
+        val user = holder.registerUserByPhone("John Doe", "+7 (917) 971-11-11")
+        val expectedInfo = """
+            firstName: John
+            lastName: Doe
+            login: +79179711111
+            fullName: John Doe
+            initials: J D
+            email: null
+            phone: +79179711111
+            meta: {auth=sms}
+        """.trimIndent()
+
+        val successResult =  holder.loginUser("+7 (917) 971-11-11", user.accessCode!!)
+
+        Assert.assertEquals(expectedInfo, successResult)
+    }
+
+    @Test
+    fun login_user_fail() {
+        val holder = UserHolder
+        holder.registerUser("John Doe", "John_Doe@unknown.com","testPass")
+
+        val failResult =  holder.loginUser("john_doe@unknown.com", "test")
+
+        Assert.assertNull(failResult)
+    }
+
+    @Test
+    fun login_user_not_found() {
+        val holder = UserHolder
+        holder.registerUser("John Doe", "John_Doe@unknown.com","testPass")
+
+        val failResult =  holder.loginUser("john_cena@unknown.com", "test")
+
+        Assert.assertNull(failResult)
+    }
+
 //    @Test
 //    fun request_access_code() {
 //        val holder = UserHolder

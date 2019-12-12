@@ -11,9 +11,8 @@ object UserHolder {
         return newUser.also { user -> map[user.login] = user }
     }
 
-
     fun registerUserByPhone(fullName: String, rawPhone: String): User {
-        val number = rawPhone.replace("[^+\\d]|(?<=.)\\+".toRegex(), "")
+        val number = getNumberFromRaw(rawPhone)
         require(number.length == 12) { "Enter a valid phone number starting with a + and containing 11 digits" }
         require(map[number] == null) { "A user with this phone already exists" }
         return User.makeUser(fullName, phone = number)
@@ -21,11 +20,15 @@ object UserHolder {
     }
 
     fun loginUser(login: String, password: String): String? {
-        return map[login.trim()]?.run {
-            if (checkPassword(password)) this.userInfo
+        val user = map[login.trim()] ?: map[getNumberFromRaw(login)]
+        return user?.run {
+            if (checkPassword(password) || (password == this.accessCode)) this.userInfo
             else null
         }
     }
+
+    private fun getNumberFromRaw(rawPhone: String) =
+        rawPhone.replace("[^+\\d]|(?<=.)\\+".toRegex(), "")
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     fun clearMap() = map.clear()
