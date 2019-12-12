@@ -42,7 +42,7 @@ class User private constructor(
         ByteArray(16).also { SecureRandom().nextBytes(it) }.toString()
     }
 
-    private lateinit var passwordHash: String
+    lateinit var passwordHash: String
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     var accessCode: String? = null
@@ -99,9 +99,9 @@ class User private constructor(
         else throw IllegalArgumentException("The entered password does not match the current password")
     }
 
-    private fun encrypt(password: String): String = salt.plus(password).md5()
+    fun encrypt(password: String): String = salt.plus(password).md5()
 
-    private fun generateAccessCode(): String {
+    fun generateAccessCode(): String {
         val possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
 
         return StringBuilder().apply {

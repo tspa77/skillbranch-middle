@@ -27,6 +27,16 @@ object UserHolder {
         }
     }
 
+    fun requestAccessCode(login: String) {
+        val user = map[login.trim()] ?: map[getNumberFromRaw(login)]
+        user?.run {
+            with(this) {
+                accessCode = generateAccessCode()
+                passwordHash = encrypt(accessCode!!)
+            }
+        }
+    }
+
     private fun getNumberFromRaw(rawPhone: String) =
         rawPhone.replace("[^+\\d]|(?<=.)\\+".toRegex(), "")
 
