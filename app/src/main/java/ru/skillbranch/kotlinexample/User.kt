@@ -81,7 +81,7 @@ class User private constructor(
         login = email ?: phone!!
 
         userInfo = """
-            firstName: $firstName 
+            firstName: $firstName
             lastName: $lastName
             login: $login
             fullName: $fullName
@@ -99,7 +99,6 @@ class User private constructor(
         else throw IllegalArgumentException("The entered password does not match the current password")
     }
 
-
     private fun encrypt(password: String): String = salt.plus(password).md5()
 
     private fun generateAccessCode(): String {
@@ -109,7 +108,6 @@ class User private constructor(
             repeat(6) {
                 (possible.indices).random().also { index ->
                     append(possible[index])
-
                 }
             }
         }.toString()
@@ -145,7 +143,6 @@ class User private constructor(
                 )
                 else -> throw IllegalArgumentException("Email or phone must be not null or blank")
             }
-
         }
 
         private fun String.fullNameToPair(): Pair<String, String?> {
@@ -161,13 +158,6 @@ class User private constructor(
                         )
                     }
                 }
-
-
         }
-
     }
-
-
 }
-
-

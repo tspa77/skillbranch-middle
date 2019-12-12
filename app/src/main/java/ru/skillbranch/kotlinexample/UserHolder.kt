@@ -1,15 +1,15 @@
 package ru.skillbranch.kotlinexample
 
+import androidx.annotation.VisibleForTesting
+
 object UserHolder {
     private val map = mutableMapOf<String, User>()
 
-    fun registerUser(
-        fullName: String,
-        email: String,
-        password: String
-    ): User {
-        return User.makeUser(fullName, email = email, password = password)
-            .also { user -> map[user.login] = user }
+    fun registerUser(fullName: String, email: String, password: String): User {
+        val newUser = User.makeUser(fullName, email = email, password = password)
+        if (map.containsKey(newUser.login))
+            throw IllegalArgumentException("A user with this email already exists +${map.size}")
+        return newUser.also { user -> map[user.login] = user }
     }
 
     fun loginUser(login: String, password: String): String? {
@@ -18,5 +18,9 @@ object UserHolder {
             else null
         }
     }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    fun clearMap() = map.clear()
+
 
 }
