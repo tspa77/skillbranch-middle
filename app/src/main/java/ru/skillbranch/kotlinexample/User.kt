@@ -1,11 +1,9 @@
 package ru.skillbranch.kotlinexample
 
 import androidx.annotation.VisibleForTesting
-import java.lang.StringBuilder
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.security.SecureRandom
-import kotlin.IllegalArgumentException
 
 class User private constructor(
     private val firstName: String,
@@ -69,6 +67,27 @@ class User private constructor(
         passwordHash = encrypt(code)
         accessCode = code
         sendAccessCodeToUser(rawPhone, code)
+    }
+
+    // for csv
+    constructor(
+        firstName: String,
+        lastName: String?,
+        email: String?,
+        rawPhone: String?,
+        salt: String,
+        password: String
+    ) : this(
+        firstName,
+        lastName,
+        email = email,
+        rawPhone = rawPhone,
+        meta = mapOf("src" to "csv")
+    ) {
+        println("Third csv constructor")
+        passwordHash = password
+//        this.salt = salt
+
     }
 
     init {
@@ -145,6 +164,18 @@ class User private constructor(
             }
         }
 
+        fun importUser(
+            fullName: String,
+            email: String? = null,
+            phone: String? = null,
+            salt: String,
+            password: String
+        ): User {
+            val (firstName, lastName) = fullName.fullNameToPair()
+
+            return User(firstName, lastName, email, phone, salt, password)
+        }
+
         private fun String.fullNameToPair(): Pair<String, String?> {
             return this.split(" ")
                 .filter { it.isNotBlank() }
@@ -154,7 +185,7 @@ class User private constructor(
                         2 -> first() to last()
                         else -> throw IllegalArgumentException(
                             "Fullname must contain only first name and last name, " +
-                                    "current split result ${this@fullNameToPair}"
+                                    "current split result $this"
                         )
                     }
                 }

@@ -42,4 +42,29 @@ object UserHolder {
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     fun clearMap() = map.clear()
+
+    fun importUsers(list: List<String>): List<User> {
+        val listResult = mutableListOf<User>()
+
+        list.forEach {
+            val userFieldsList = it.split(";")
+
+            val fullName = userFieldsList[0]
+            val email: String? = if (userFieldsList[1].isNotEmpty()) userFieldsList[1] else null
+            val phone: String? =
+                if (userFieldsList[3].isNotEmpty()) getNumberFromRaw(userFieldsList[3]) else null
+            val (salt: String?, hash: String?) = userFieldsList[2].split(":")
+
+            val user = User.importUser(
+                fullName,
+                email = email,
+                phone = phone,
+                salt = salt,
+                password = hash
+            )
+            listResult.add(user)
+//            println(user.userInfo)
+        }
+        return listResult
+    }
 }
