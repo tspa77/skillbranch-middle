@@ -55,17 +55,22 @@ object UserHolder {
                 if (userFieldsList[3].isNotEmpty()) getNumberFromRaw(userFieldsList[3]) else null
             val (salt: String?, hash: String?) = userFieldsList[2].split(":")
 
+
             val user = User.importUser(
                 fullName,
                 email = email,
                 phone = phone,
                 salt = salt,
-                password = hash
+                hash = hash
             )
             listResult.add(user)
-//            println(user.userInfo)
             map[user.login] = user
         }
+//
+        for ((k, v) in map) {
+            println("$k = \n${v.userInfo}")
+        }
+
         return listResult
     }
 }

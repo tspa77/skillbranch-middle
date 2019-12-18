@@ -36,7 +36,10 @@ class User private constructor(
         }
         get() = _login!!
 
-    private val salt: String by lazy {
+    private var salt: String? = null
+        get() = field ?: _salt
+
+    private val _salt: String by lazy {
         ByteArray(16).also { SecureRandom().nextBytes(it) }.toString()
     }
 
@@ -76,7 +79,7 @@ class User private constructor(
         email: String?,
         rawPhone: String?,
         salt: String,
-        password: String
+        hash: String
     ) : this(
         firstName,
         lastName,
@@ -85,9 +88,8 @@ class User private constructor(
         meta = mapOf("src" to "csv")
     ) {
         println("Third csv constructor")
-        passwordHash = password
-//        this.salt = salt
-
+        this.salt = salt
+        passwordHash = hash
     }
 
     init {
@@ -119,6 +121,8 @@ class User private constructor(
     }
 
     fun encrypt(password: String): String = salt.plus(password).md5()
+
+    fun encryptWithSalt(saltOld: String, password: String): String = saltOld.plus(password).md5()
 
     fun generateAccessCode(): String {
         val possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
@@ -169,11 +173,11 @@ class User private constructor(
             email: String? = null,
             phone: String? = null,
             salt: String,
-            password: String
+            hash: String
         ): User {
             val (firstName, lastName) = fullName.fullNameToPair()
 
-            return User(firstName, lastName, email, phone, salt, password)
+            return User(firstName, lastName, email, phone, salt, hash)
         }
 
         private fun String.fullNameToPair(): Pair<String, String?> {
