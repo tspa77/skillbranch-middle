@@ -11,9 +11,10 @@ package ru.skillbranch.kotlinexample.extensions
  * предиката (элемент соответствующий условию тоже должен быть исключен из результирующей коллекции)
  *
  * (Пример:
- * listOf(1, 2, 3).dropLastUntil{ it==2 } // [1]
- * "House Nymeros Martell of Sunspear".split(" ")
- * .dropLastUntil{ it == "of" } // [House, Nymeros, Martell])
+ * listOf(1, 2, 3).dropLastUntil{ it==2 }
+ * // [1]
+ * "House Nymeros Martell of Sunspear".split(" ").dropLastUntil{ it == "of" }
+ * // [House, Nymeros, Martell])
  *
  */
 
